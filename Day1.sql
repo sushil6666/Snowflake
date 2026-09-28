@@ -503,3 +503,6 @@ ORDER BY tbl;
 -- DROP TABLE promotions;
 -- UNDROP TABLE promotions;
 -- SHOW TABLES HISTORY LIKE 'PROMOTIONS' IN SCHEMA DEMO_CLASS;
+
+
+select * from ORDERS_trans;

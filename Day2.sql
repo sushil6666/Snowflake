@@ -14,6 +14,19 @@ FROM SF_LEARN.INFORMATION_SCHEMA.TABLES
 WHERE table_schema = 'DEMO_CLASS'
 ORDER BY table_name;
 
+
+create table ORDERS_trans as select * from SF_LEARN.DEMO_CLASS.ORDERS; --per
+
+delete from ORDERS_trans where order_id in (8,
+14,
+16);
+
+create transient table ORDERS_trans as select * from SF_LEARN.DEMO_CLASS.ORDERS;
+
+create temporary table ORDERS_trans as select * from SF_LEARN.DEMO_CLASS.ORDERS; --temp
+
+select * from demo_class.ORDERS_trans;
+
 --timestamp
 
 select * from SF_LEARN.DEMO_CLASS.ORDERS AT(TIMESTAMP => dateadd (minutes, -10, current_timestamp()) );
