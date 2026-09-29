@@ -43,7 +43,7 @@ CREATE OR REPLACE TABLE demo_target (
 
 COPY INTO demo_target(id, name, city, file_name)
 FROM @demo_internal_stage
-FILE_FORMAT = (TYPE = 'CSV' SKIP_HEADER = 1)
+FILE_FORMAT = (TYPE = 'CSV' SKIP_HEADER = 2)
 ON_ERROR = 'CONTINUE';
 -- keep files on stage after loading
 
