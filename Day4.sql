@@ -64,3 +64,5 @@ GRANT ALL PRIVILEGES ON DATABASE foundations_demo TO ROLE foundations_admin;
 GRANT ALL PRIVILEGES ON SCHEMA foundations_demo.lab TO ROLE foundations_admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA foundations_demo.lab TO ROLE foundations_admin;
 GRANT ALL PRIVILEGES ON FUTURE TABLES IN SCHEMA foundations_demo.lab TO ROLE foundations_admin;
+
+
