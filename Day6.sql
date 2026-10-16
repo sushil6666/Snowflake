@@ -144,11 +144,14 @@ AS (val STRING) RETURNS STRING ->
     END;
 
 -- Apply the hash-based policy
-ALTER TABLE masking_demo.data.customers MODIFY COLUMN ssn SET MASKING POLICY security.ssn_hash_mask;
+
+ALTER TABLE masking_demo.data.customers MODIFY COLUMN email UNSET MASKING POLICY;
+
+ALTER TABLE masking_demo.data.customers MODIFY COLUMN region SET MASKING POLICY security.ssn_hash_mask;
 
 -- Verify: same SSN always produces the same hash
 USE ROLE support_role;
-SELECT id, name, ssn FROM masking_demo.data.customers;
+SELECT * FROM masking_demo.data.customers;
 
 
 -- ============================================================================
@@ -168,13 +171,13 @@ AS (email VARCHAR, region VARCHAR) RETURNS VARCHAR ->
     END;
 
 -- Swap email policy to conditional version
-ALTER TABLE masking_demo.data.customers MODIFY COLUMN email UNSET MASKING POLICY;
+ALTER TABLE masking_demo.data.customers MODIFY COLUMN region UNSET MASKING POLICY;
 ALTER TABLE masking_demo.data.customers MODIFY COLUMN email
     SET MASKING POLICY security.email_conditional_mask
     USING (email, region);
 
 -- Test
-USE ROLE support_role;
+USE ROLE public;
 SELECT id, name, email, region FROM masking_demo.data.customers;
 -- NA rows show full email; EU/APAC rows show masked email
 
@@ -203,13 +206,25 @@ AS (val STRING) RETURNS STRING ->
     END;
 
 -- Bind the masking policy to the tag (for STRING type)
-USE ROLE ACCOUNTADMIN;
+USE ROLE support_role;
 ALTER TAG masking_demo.security.pii_tag SET MASKING POLICY security.pii_string_mask;
 
 -- Now tag any column — the masking policy applies automatically
 -- (first unset existing direct policies on name column if any)
 ALTER TABLE masking_demo.data.customers MODIFY COLUMN name
     SET TAG masking_demo.security.pii_tag = 'customer_name';
+
+
+    ALTER TABLE masking_demo.data.customers MODIFY COLUMN email
+    SET TAG masking_demo.security.pii_tag = 'customer_email';
+
+   select * from masking_demo.data.customers;
+
+
+   TAG: pii_tag ──bound to──▶ POLICY: pii_string_mask
+     │
+     ▼ (this ALTER sets the tag)
+CUSTOMERS.NAME ──automatically masked──▶ non-analysts see "** PII REDACTED **"
 
 -- Test: name column is now masked via tag
 USE ROLE support_role;
