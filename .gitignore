@@ -1,0 +1,9 @@
+# Markdown files (instructor notes, interview questions/answer key)
+*.md
+
+# Backup files
+*_BACKUP*
+*_backup*
+*.bak
+*.backup
+*~
